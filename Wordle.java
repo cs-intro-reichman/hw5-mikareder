@@ -36,6 +36,9 @@ public class Wordle {
         guess  = guess.toUpperCase();
         int[] freq = new int[26];
 
+        int len = secret.length();
+        boolean[] used = new boolean[len]; 
+
             for (int i = 0; i < secret.length(); i++) {
                 freq[secret.charAt(i) - 'A']++;
             }
@@ -43,6 +46,7 @@ public class Wordle {
             for (int i = 0; i < guess.length(); i++) {
                 if (guess.charAt(i) == secret.charAt(i)) {
                     resultRow[i] = 'G';
+                    used[i] = true;
                     freq[guess.charAt(i) - 'A']--;  
                 } else {
                     resultRow[i] = '_'; 
@@ -56,11 +60,12 @@ public class Wordle {
                 int index = guess.charAt(i) - 'A';
                 if (freq[index] > 0) {
                     resultRow[i] = 'Y';
+                    used[i] = true;
                     freq[index]--; 
                 }
             }
 
-            System.out.println(resultRow);
+        System.out.println(new String(resultRow));
     }
 
     // Store guess string (chars) into the given row of guesses 2D array.
