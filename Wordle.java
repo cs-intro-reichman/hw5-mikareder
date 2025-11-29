@@ -32,42 +32,35 @@ public class Wordle {
     // Compute feedback for a single guess into resultRow.
     // G for exact match, Y if letter appears anywhere else, _ otherwise.
     public static void computeFeedback(String secret, String guess, char[] resultRow) {
-		secret = secret.toUpperCase();
-        guess  = guess.toUpperCase();
-        int[] freq = new int[26];
+            secret = secret.toUpperCase();
+            guess  = guess.toUpperCase();
+            int len = secret.length();
+            boolean[] used = new boolean[len]; 
 
-        int len = secret.length();
-        boolean[] used = new boolean[len]; 
-
-            for (int i = 0; i < secret.length(); i++) {
-                freq[secret.charAt(i) - 'A']++;
-            }
-
-            for (int i = 0; i < guess.length(); i++) {
+            
+            for (int i = 0; i < len; i++) {
                 if (guess.charAt(i) == secret.charAt(i)) {
                     resultRow[i] = 'G';
                     used[i] = true;
-                    freq[guess.charAt(i) - 'A']--;  
                 } else {
-                    resultRow[i] = '_'; 
+                    resultRow[i] = '_';
                 }
             }
 
-           
-            for (int i = 0; i < guess.length(); i++) {
+            for (int i = 0; i < len; i++) {
                 if (resultRow[i] == 'G') continue;
 
-                int index = guess.charAt(i) - 'A';
-                if (freq[index] > 0) {
-                    resultRow[i] = 'Y';
-                    used[i] = true;
-                    freq[index]--; 
+                for (int j = 0; j < len; j++) {
+                    if (!used[j] && guess.charAt(i) == secret.charAt(j)) {
+                        resultRow[i] = 'Y';
+                        used[j] = true; 
+                        break;
+                    }
                 }
             }
 
-        System.out.println(new String(resultRow));
-    }
-
+            System.out.println(new String(resultRow));
+        }
     // Store guess string (chars) into the given row of guesses 2D array.
     // For example, of guess is HELLO, and row is 2, then after this function 
     // guesses should look like:
